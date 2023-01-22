@@ -1,0 +1,25 @@
+{% extends 'logout.html' %}
+
+{% block body %} 
+<form action="">
+
+    <h2>Make reservation:</h2>
+
+    <div>
+        <p>Date</p>
+        <input type="date">
+    </div>
+    <p>Enter an optional time range and we will only show appointments in that range. Please keep in mind that all appointments are 30 minutes when selecting a time.</p>
+    <div>
+        <input type="time" step="1800">
+        <input type="time" step="1800">
+    </div>
+
+    <button type="submit"
+            class="text-md text-white bg-gradient-to-br from-purple-300 to-blue-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+            Search
+        </button>
+
+</form>
+
+{% endblock %}
