@@ -25,11 +25,12 @@ def get_user_by_username(username):
 
     return User.query.filter(User.username == username).first()
 
-def create_reservation(user_id, length, date):
+def create_reservation(user_id, appointment_id, length, date):
     """Create and return a reservation"""
 
     reservation = Reservation(
         user_id=user_id,
+        appointment_id=appointment_id,
         length=length,
         date=date
     )
@@ -55,6 +56,11 @@ def get_all_appointments():
     """Return all appointments"""
 
     return Appointment.query.all()
+
+def get_appointment_by_id(appointment_id):
+    """Return appointment by id"""
+
+    return Appointment.query.get(appointment_id)
 
 if __name__ == '__main__':
     from server import app

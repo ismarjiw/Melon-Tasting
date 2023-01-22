@@ -2,14 +2,26 @@
 
 {% block body %} 
 
-{% if no_appointment %}
-    <p>No appointments match your search. Please try again.</p>
-{% else %}
+{% if appointment %}
+<div>
     <ul>
         <li>{{ appointment.date }}</li>
         <li>{{ appointment.start_time }}</li>
         <li>{{ appointment.end_time }}</li>
-    </ul>
+    </ul> 
+    <button onclick="onClickReserve( '{{ appointment }}' )" type="button" class="text-md text-white bg-gradient-to-br from-purple-300 to-blue-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Make reservation</button> 
+</div>
+{% endif %}
+{% if appointment %}
+<script>
+    function onClickReserve(appointment) {
+        fetch(`/make_appointment/${appointment.appointment_id}`) 
+            .then((response) => {
+                console.log(response);
+                window.location = ("/reservations");
+        });
+    };
+</script>
 {% endif %}
 
 {% endblock %}

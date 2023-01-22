@@ -58,23 +58,46 @@ def search_appointments():
     date_object = date(*map(int, requested_date.split("-")))
 
     for appointment in appointments:
-        if appointment.date == date_object and appointment.start_time == start_time and appointment.end_time == end_time:
-            return render_template("make_appointment.html", appointment=appointment)
-        else:
-            no_appointment = 'True'
-            return render_template("make_appointment.html", no_appointment=no_appointment)
+        if appointment.start_time == start_time:
+            if appointment.end_time == end_time:
+                if appointment.date == date_object:
+                    return appointment
+    
+    return render_template("make_appointment.html", appointment=appointment)
+
+@app.route("/make_appointment/<appointment>")
+def make_appointment(appointment):
+    """Page where users can save reservation of available appointments"""
+
+    # why is appointment_id None on website but has appointment_id (1,2) in psql???
+    # in interactive mode: 
+    # [<Appointment appointment_id=None date=2023-01-21>, <Appointment appointment_id=None date=2023-01-21>]
+
+    if appointment.appointment_id != None:
+        reservation = crud.create_reservation(user_id=session["user_id"], appointment_id= appointment.appointment_id, length=30, date= appointment.date)
+        db.session.add(reservation)
+        print(reservation)
+        print('*'*50)
+        db.session.commit()
+    else:
+        return f"Unable to save reservation for selected appointment"
+
+    return redirect("/reservations")
 
 @app.route("/reservations")
 def made_reservations():
     """User made reservations"""
 
-    reservations = crud.get_reservation_by_user_id(session["user_id"])
+    if 'user_id' in session:
+        reservations = crud.get_reservation_by_user_id(session["user_id"])
+    else:
+        return redirect("/login")
 
     return render_template("all_reservations.html", reservations=reservations)
 
 @app.route("/appointments")
 def appointment_page():
-    """Appointment page"""
+    """Page with all available appointments"""
 
     appointments = crud.get_all_appointments()
 
