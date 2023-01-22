@@ -1,0 +1,12 @@
+{% extends 'logout.html' %}
+
+{% block body %} 
+
+{% for reservation in reservations %}
+<ul>
+    <li>{{ reservation }}</li>
+</ul>
+{% endfor %}
+
+
+{% endblock %}

@@ -1,9 +1,9 @@
 import os
 from random import choice, randint
-from datetime import datetime
+from datetime import datetime, date, time
 
 import crud
-from model import User, Reservation, connect_to_db, db
+from model import User, Reservation, Appointment, connect_to_db, db
 import server
 
 os.system("dropdb meditations")
@@ -42,5 +42,23 @@ res3 = Reservation (
     date = datetime.now()
 )
 
-db.session.add_all([user1, user2, user3, res1, res2, res3])
+apt1 = Appointment(
+    length=30, 
+    date=date(2023, 1, 21), 
+    start_time=time(9,0), 
+    end_time=time(9,30))
+
+apt2 = Appointment(
+    length=30, 
+    date=date(2023, 1, 21), 
+    start_time=time(9,30), 
+    end_time=time(10,0))
+
+apt3 = Appointment(
+    length=30, 
+    date=date(2023, 1, 21), 
+    start_time=time(10,0), 
+    end_time=time(10,30))
+
+db.session.add_all([user1, user2, user3, res1, res2, res3, apt1, apt2, apt3])
 db.session.commit()

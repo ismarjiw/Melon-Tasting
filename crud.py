@@ -1,4 +1,4 @@
-from model import db, User, Reservation, connect_to_db
+from model import db, User, Reservation, Appointment, connect_to_db
 from flask import json
 from datetime import *
 from sqlalchemy import desc
@@ -20,7 +20,7 @@ def get_user_by_id(user_id):
 
     return User.query.get(user_id)
 
-def get_user_by_un(username):
+def get_user_by_username(username):
     """Return a user by username"""
 
     return User.query.filter(User.username == username).first()
@@ -41,11 +41,21 @@ def get_reservation_by_id(reservation_id):
 
     return Reservation.query.get(reservation_id)
 
+def get_reservation_by_user_id(user_id):
+    """Return all reservations by user id"""
+
+    return Reservation.query.get(user_id)
+
 def get_all_reservations():
     """Return all reservations"""
 
     return Reservation.query.all()
 
+def get_all_appointments():
+    """Return all appointments"""
+
+    return Appointment.query.all()
+
 if __name__ == '__main__':
     from server import app
-    connect_to_db(app)
+    connect_to_db(app, "melons")

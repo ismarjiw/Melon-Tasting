@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, date, time
 
 db = SQLAlchemy()
 
@@ -13,6 +13,7 @@ class User(db.Model):
     username = db.Column(db.String, unique=True)
 
     reservation = db.relationship("Reservation", uselist=False, back_populates="user")
+    appointment = db.relationship("Appointment", uselist=False, back_populates="user")
 
     def __repr__(self):
         return f"<User user_id={self.user_id} username={self.username}>"
@@ -25,8 +26,12 @@ class Reservation(db.Model):
     reservation_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    appointment_id = db.Column(db.Integer, db.ForeignKey("appointments.appointment_id"))
+
     length = db.Column(db.Integer)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
 
     user = db.relationship("User", uselist=False, back_populates="reservation")
 
@@ -40,6 +45,18 @@ class Appointment(db.Model):
 
     appointment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    reservation_id = db.Column(db.Integer, db.ForeignKey("reservations.reservation_id"))
+
+    length = db.Column(db.Integer)
+    date = db.Column(db.Date)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+
+    user = db.relationship("User", uselist=False, back_populates="appointment")
+
+    def __repr__(self):
+        return f"<Appointment appointment_id={self.reservation_id} date={self.date}>"
 
 def connect_to_db(app, db_name):
     """Connect to database"""

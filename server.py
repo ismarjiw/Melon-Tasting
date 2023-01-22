@@ -26,7 +26,7 @@ def user_login_page():
 
     username = request.form.get("username")
 
-    user = crud.get_user_by_un(username=username)
+    user = crud.get_user_by_username(username=username)
 
     if user:
         session["username"] = username
@@ -38,14 +38,47 @@ def user_login_page():
 
 @app.route("/make_reservation")
 def reservation_page():
-    """Reservation page"""
+    """Make a reservation"""
 
     if 'user_id' not in session: 
         return redirect("/login")
 
-    user = crud.get_user_by_id(session["user_id"])
-
     return render_template("reservation.html")
+
+@app.route("/make_reservation", methods = ["POST"])
+def search_appointments():
+    """User checks if appointment is available for reservation"""
+
+    requested_date = request.form.get("date")
+    start_time = request.form.get("start-time")
+    end_time = request.form.get("end-time")
+
+    appointments = crud.get_all_appointments()
+
+    date_object = date(*map(int, requested_date.split("-")))
+
+    for appointment in appointments:
+        if appointment.date == date_object and appointment.start_time == start_time and appointment.end_time == end_time:
+            return render_template("make_appointment.html", appointment=appointment)
+        else:
+            no_appointment = 'True'
+            return render_template("make_appointment.html", no_appointment=no_appointment)
+
+@app.route("/reservations")
+def made_reservations():
+    """User made reservations"""
+
+    reservations = crud.get_reservation_by_user_id(session["user_id"])
+
+    return render_template("all_reservations.html", reservations=reservations)
+
+@app.route("/appointments")
+def appointment_page():
+    """Appointment page"""
+
+    appointments = crud.get_all_appointments()
+
+    return render_template("appointments.html", appointments=appointments)
 
 @app.route("/logout")
 def logout():

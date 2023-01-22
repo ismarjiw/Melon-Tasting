@@ -1,18 +1,20 @@
 {% extends 'logout.html' %}
 
 {% block body %} 
-<form action="">
+<form action="/make_reservation" method="POST">
 
-    <h2>Make reservation:</h2>
+    <h2>Make a reservation:</h2>
 
     <div>
         <p>Date</p>
-        <input type="date">
+        <input type="date" name="date">
     </div>
-    <p>Enter an optional time range and we will only show appointments in that range. Please keep in mind that all appointments are 30 minutes when selecting a time.</p>
+    <p>Enter an optional time range and we will only show appointments in that range. Please keep in mind that all appointments are 30 minutes long when selecting a time.</p>
     <div>
-        <input type="time" step="1800">
-        <input type="time" step="1800">
+        <p>Start time:</p>
+        <input type="time" step="2" min="8:00" max="16:30" name="start-time">
+        <p>End time:</p>
+        <input type="time" step="2" min="8:30" max="17:00" name="end-time">
     </div>
 
     <button type="submit"

@@ -1,0 +1,14 @@
+{% extends 'logout.html' %}
+
+{% block body %} 
+
+{% for appointment in appointments %}
+<ul>
+    <li>{{ appointment.date }}</li>
+    <li>{{ appointment.start_time }}</li>
+    <li>{{ appointment.end_time }}</li>
+</ul>
+{% endfor %}
+
+
+{% endblock %}
